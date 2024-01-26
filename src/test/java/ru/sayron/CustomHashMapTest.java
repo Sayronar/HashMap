@@ -1,83 +1,72 @@
 package ru.sayron;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-class CustomHashMapTest {
+public class CustomHashMapTest {
+    CustomHashMap<Integer, String> map;
 
-    @Test
-    void testPutAndGet() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
-
-        assertEquals(1, map.get("one"));
-        assertEquals(2, map.get("two"));
-        assertEquals(3, map.get("three"));
+    @Before
+    public void setUp() {
+        map = new CustomHashMap<>();
+        for (int i = 1; i <= 10000; i++) {
+            map.put(i, "Value " + i);
+        }
     }
 
     @Test
-    void testRemove() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
-
-        assertEquals(2, map.remove("two"));
-        assertNull(map.get("two"));
-        assertEquals(2, map.size());
+    public void testSize() {
+        Assert.assertEquals(10000, map.size());
     }
 
     @Test
-    void testContainsKey() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
-
-        assertTrue(map.containsKey("one"));
-        assertTrue(map.containsKey("two"));
-        assertFalse(map.containsKey("four"));
+    public void testGet() {
+        Assert.assertEquals("Value 5000", map.get(5000));
+        Assert.assertNull(map.get(10001));
     }
 
     @Test
-    void testContainsValue() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
-
-        assertTrue(map.containsValue(1));
-        assertTrue(map.containsValue(2));
-        assertFalse(map.containsValue(4));
+    public void testPut() {
+        map.put(10_001, "Value 10001");
+        Assert.assertEquals("Value 10001", map.get(10001));
+        Assert.assertEquals(10001, map.size());
     }
 
     @Test
-    void testSize() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
-
-        assertEquals(3, map.size());
-
-        map.remove("two");
-        assertEquals(2, map.size());
+    public void testRemove() {
+        Assert.assertEquals("Value 5000", map.remove(5000));
+        Assert.assertNull(map.get(5000));
+        Assert.assertEquals(9999, map.size());
     }
 
     @Test
-    void testClear() {
-        CustomHashMap<String, Integer> map = new CustomHashMap<>();
-        map.put("one", 1);
-        map.put("two", 2);
-        map.put("three", 3);
+    public void testContainsKey() {
+        Assert.assertTrue(map.containsKey(5000));
+        Assert.assertFalse(map.containsKey(10001));
+    }
 
+    @Test
+    public void testContainsValue() {
+        Assert.assertTrue(map.containsValue("Value 5000"));
+        Assert.assertFalse(map.containsValue("Value 10001"));
+    }
+
+    @Test
+    public void testKeySet() {
+        Assert.assertTrue(map.keySet().contains(5000));
+        Assert.assertFalse(map.keySet().contains(10001));
+    }
+
+    @Test
+    public void testValues() {
+        Assert.assertTrue(map.values().contains("Value 5000"));
+        Assert.assertFalse(map.values().contains("Value 10001"));
+    }
+
+    @Test
+    public void testClear() {
         map.clear();
-
-        assertEquals(0, map.size());
-        assertNull(map.get("one"));
-        assertNull(map.get("two"));
-        assertNull(map.get("three"));
+        Assert.assertTrue(map.isEmpty());
     }
 }
