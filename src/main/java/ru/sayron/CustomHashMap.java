@@ -243,7 +243,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
      */
     @Override
     public Collection<V> values() {
-        List<V> values = new ArrayList<>();
+        Collection<V> values = new ArrayList<>();
         for (Node<K, V> node : table) {
             while (node != null) {
                 values.add(node.value);
